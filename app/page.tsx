@@ -157,7 +157,7 @@ export default function Home() {
           className="bg-[#0c1828] border border-[#0ea5e9]/50 rounded-2xl p-8 w-full max-w-md shadow-2xl shadow-[#0ea5e9]/20 relative"
         >
           {/* Glow effect */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-[#0ea5e9] to-[#38bdf8] rounded-2xl opacity-10 blur" />
+          <div className="absolute -inset-0.5 bg-linear-gradient-to-r from-[#0ea5e9] to-[#38bdf8] rounded-2xl opacity-10 blur" />
           
           <div className="relative">
             <h2 className="text-white font-bold text-xl mb-1">Letöltés</h2>
