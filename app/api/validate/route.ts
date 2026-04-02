@@ -1,48 +1,75 @@
 import { NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Key from '@/lib/models/key';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+);
 
 export async function POST(request: Request) {
-    console.log('MONGODB_URI:', process.env.MONGODB_URI);
     try {
-        await connectDB();
         const { key, hwid } = await request.json();
 
-        console.log('Beérkező kulcs:', key);
-        console.log('Beérkező kulcs hossza:', key.length);
-
         if (!key) {
-            return NextResponse.json({ valid: false, message: 'Missing key!' }, { status: 400 });
+            return NextResponse.json(
+                { valid: false, message: 'Missing key!' },
+                { status: 400 }
+            );
         }
 
-        const allKeys = await Key.find({});
-        console.log('Összes kulcs:', allKeys.map(k => k.key));
+        // Kulcs keresése
+        const { data: keyDoc, error } = await supabase
+            .from('keys')
+            .select('*')
+            .eq('key', key.trim())
+            .eq('active', true)
+            .single();
 
-        const keyDoc = await Key.findOne({ key: key.trim(), active: true });
-        console.log('Talált dokumentum:', keyDoc);
-
-        if (!keyDoc) {
-            return NextResponse.json({ valid: false, message: 'Invalid key!' }, { status: 200 });
+        if (error || !keyDoc) {
+            return NextResponse.json(
+                { valid: false, message: 'Invalid key!' },
+                { status: 200 }
+            );
         }
 
+        // Első aktiválás - HWID mentése
         if (!keyDoc.hwid) {
-            keyDoc.hwid = hwid;
-            await keyDoc.save();
-            return NextResponse.json({ valid: true, message: 'First activation successful!' }, { status: 200 });
+            const { error: updateError } = await supabase
+                .from('keys')
+                .update({ hwid: hwid })
+                .eq('id', keyDoc.id);
+
+            if (updateError) {
+                return NextResponse.json(
+                    { valid: false, message: 'Activation failed!' },
+                    { status: 500 }
+                );
+            }
+
+            return NextResponse.json(
+                { valid: true, message: 'First activation successful!' },
+                { status: 200 }
+            );
         }
 
+        // HWID ellenőrzés
         if (keyDoc.hwid !== hwid) {
-            return NextResponse.json({ valid: false, message: 'This key is activated on another machine!' }, { status: 200 });
+            return NextResponse.json(
+                { valid: false, message: 'This key is activated on another machine!' },
+                { status: 200 }
+            );
         }
 
-        return NextResponse.json({ valid: true, message: 'Key accepted!' }, { status: 200 });
+        return NextResponse.json(
+            { valid: true, message: 'Key accepted!' },
+            { status: 200 }
+        );
 
     } catch (error) {
-        console.error('Részletes hiba:', error);
-        return NextResponse.json({ 
-            valid: false, 
-            message: error instanceof Error ? error.message : String(error)
-        }, { status: 500 });  
-}
-
+        console.error('Hiba:', error);
+        return NextResponse.json(
+            { valid: false, message: error instanceof Error ? error.message : String(error) },
+            { status: 500 }
+        );
+    }
 }
