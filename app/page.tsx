@@ -98,7 +98,7 @@ export default function Home() {
       ))}
 
       {/* Gradient glow háttér */}
-      <div className="absolute inset-0 bg-gradient-radial from-[#0ea5e9]/10 via-transparent to-transparent" />
+      
 
       {/* Navbar */}
     <motion.nav
@@ -115,7 +115,7 @@ export default function Home() {
   </div>
 
   <a
-    href="https://discord.gg/DISCORD_LINK"
+    href="https://discord.gg/McmUK9TzxP"
     target="_blank"
     className="flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white px-4 py-2 rounded-xl transition-colors duration-200 text-sm font-bold"
   >
@@ -145,7 +145,7 @@ export default function Home() {
             ETHA <span className="text-[#0ea5e9]">EXECUTOR</span>
           </motion.h1>
           <p className="text-[#38bdf8] text-lg">
-            A legjobb Roblox executor
+            A safe executor for close-friends.
           </p>
         </motion.div>
 
@@ -160,8 +160,8 @@ export default function Home() {
           <div className="absolute -inset-0.5 bg-linear-gradient-to-r from-[#0ea5e9] to-[#38bdf8] rounded-2xl opacity-10 blur" />
           
           <div className="relative">
-            <h2 className="text-white font-bold text-xl mb-1">Letöltés</h2>
-            <p className="text-[#38bdf8] text-sm mb-6">Add meg a kulcsodat a letöltéshez</p>
+            <h2 className="text-white font-bold text-xl mb-1">Download</h2>
+            <p className="text-[#38bdf8] text-sm mb-6">Type your key and click the button below</p>
 
             <div className="w-full h-px bg-[#0ea5e9]/30 mb-6" />
 
@@ -170,7 +170,7 @@ export default function Home() {
               value={key}
               onChange={(e) => setKey(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleDownload()}
-              placeholder="Írd be a kulcsod..."
+              placeholder="Key..."
               className="w-full bg-[#0a1520] border border-[#0ea5e9]/50 rounded-xl px-4 py-3 text-white font-mono text-sm placeholder-[#38bdf8]/30 focus:outline-none focus:border-[#0ea5e9] mb-4 transition-colors"
             />
 
@@ -191,7 +191,7 @@ export default function Home() {
               whileTap={{ scale: 0.98 }}
               className="w-full bg-[#0ea5e9] hover:bg-[#38bdf8] disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-colors duration-200"
             >
-              {loading ? '⏳ Ellenőrzés...' : '⬇ Letöltés'}
+              {loading ? '⏳ Checking...' : '⬇ Download'}
             </motion.button>
           </div>
         </motion.div>
