@@ -1,20 +1,35 @@
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Key from '@/lib/models/key';
+
+const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+);
 
 export async function POST(request: Request) {
     try {
-        await connectDB();
-        const { key } = await request.json();
-
+        const { key, hwid } = await request.json();
+        
         if (!key) {
-            return NextResponse.json({ valid: false, message: 'Missing key!' }, { status: 400 });
+            return NextResponse.json(
+                { valid: false, message: 'Missing key!' },
+                { status: 400 }
+            );
         }
 
-        const keyDoc = await Key.findOne({ key: key.toUpperCase(), active: true });
+        // Kulcs keresése
+        const { data: keyDoc, error } = await supabase
+            .from('keys')
+            .select('*')
+            .eq('key', key.trim())
+            .eq('active', true)
+            .single();
 
-        if (!keyDoc) {
-            return NextResponse.json({ valid: false, message: 'Invalid key!' }, { status: 200 });
+        if (error || !keyDoc) {
+            return NextResponse.json(
+                { valid: false, message: 'Invalid key!' },
+                { status: 200 }
+            );
         }
 
         // Download link - place your GitHub Releases download link here
