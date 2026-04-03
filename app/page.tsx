@@ -21,13 +21,13 @@ export default function Home() {
 
   const handleDownload = async () => {
     if (!key.trim()) {
-      setStatus('Kérlek adj meg egy kulcsot!');
+      setStatus('Please enter a key!');
       setError(true);
       return;
     }
 
     setLoading(true);
-    setStatus('Ellenőrzés...');
+    setStatus('Checking...');
     setError(false);
 
     try {
@@ -49,11 +49,11 @@ export default function Home() {
         const dlData = await dlRes.json();
 
         if (dlData.valid) {
-          setStatus('✓ Kulcs elfogadva! Letöltés indul...');
+          setStatus('✓ Key accepted! Download starting...');
           setError(false);
           const a = document.createElement('a');
           a.href = dlData.downloadUrl;
-          a.download = 'etha.executor.zip';
+          a.download = 'ethav2.exe';
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -63,7 +63,7 @@ export default function Home() {
         setError(true);
       }
     } catch {
-      setStatus('Szerver hiba! Próbáld újra.');
+      setStatus('Server error! Please try again.');
       setError(true);
     } finally {
       setLoading(false);
