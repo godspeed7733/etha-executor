@@ -33,7 +33,7 @@ export async function POST(request: Request) {
         }
 
         // Download link - place your GitHub Releases download link here
-        const downloadUrl = "https://github.com/godspeed7733/WindowsFormsApp1/releases/download/v2.1/Etha.executor.zip";
+        const downloadUrl = "https://github.com/godspeed7733/WindowsFormsApp1/releases/latest";
 
         return NextResponse.json({ valid: true, downloadUrl }, { status: 200 });
 
