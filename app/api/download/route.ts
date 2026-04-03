@@ -33,7 +33,7 @@ export async function POST(request: Request) {
         }
 
         // Download link - place your GitHub Releases download link here
-        const downloadUrl = "https://github.com/godspeed7733/WindowsFormsApp1/releases/latest";
+        const downloadUrl = "https://github.com/godspeed7733/WindowsFormsApp1/releases/latest/ethav2.exe";
 
         return NextResponse.json({ valid: true, downloadUrl }, { status: 200 });
 
